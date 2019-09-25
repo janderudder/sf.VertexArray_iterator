@@ -9,7 +9,7 @@
  *  assertion-like macro.
  */
 #define ENSURE(cond, reason)                                \
-    ::test_tool_impl::ensure(                               \
+    ::test_tool::impl::ensure(                              \
         (cond), (#cond), (reason), (__PRETTY_FUNCTION__),   \
         (__FILE__), (__LINE__))
 
@@ -18,7 +18,7 @@
 /**
  *  Impl.
  */
-namespace test_tool_impl
+namespace test_tool::impl
 {
 //* Helper class tasked with outputting text and statistics
 struct Statistics
@@ -163,4 +163,4 @@ inline Test ensure(
 
 
 
-} // namespace test_tool_impl
+} // namespace test_tool::impl

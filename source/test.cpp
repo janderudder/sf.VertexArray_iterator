@@ -12,7 +12,7 @@ void test_const_iterator();
 
 int main()
 {
-    std::boolalpha(std::cout);
+    std::boolalpha(std::cerr);
 
     std::cerr << "test sf::VertexArray's iterator\n";
     test_iterator();

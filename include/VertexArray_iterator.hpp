@@ -16,7 +16,8 @@
 #include <cstdint>
 #include <iterator>
 #include <type_traits>
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Vertex.hpp>
+#include <SFML/Graphics/VertexArray.hpp>
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     class VertexArray_iterator_interface
     exposes the (mostly) common API for the various iterator types.
