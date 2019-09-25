@@ -52,6 +52,9 @@ protected:
     VertexArray_iterator_interface(array_pointer_t, std::size_t) noexcept;
 
 public:
+    reference               operator[](std::size_t) noexcept;
+    reference               operator[](std::size_t) const noexcept;
+
     reference               operator*() noexcept;
     reference               operator*() const noexcept;
     pointer                 operator->() noexcept;
@@ -65,18 +68,6 @@ public:
     Concrete_it&            operator-=(int) noexcept;
     Concrete_it&            operator+=(Concrete_it const&) noexcept;
     Concrete_it&            operator-=(Concrete_it const&) noexcept;
-
-    friend bool operator==(Concrete_it const& lhs, Concrete_it const& rhs)
-    {
-        return lhs.m_array == rhs.m_array
-            && lhs.m_index == rhs.m_index;
-    }
-
-    friend bool operator!=(Concrete_it const& lhs, Concrete_it const& rhs)
-    {
-        return lhs.m_array != rhs.m_array
-            || lhs.m_index != rhs.m_index;
-    }
 
     friend Concrete_it operator+(Concrete_it const& it, int n)
     {
@@ -96,6 +87,38 @@ public:
     friend difference_type operator-(Concrete_it const& lhs, Concrete_it const& rhs)
     {
         return lhs.m_index - rhs.m_index;
+    }
+
+    friend bool operator==(Concrete_it const& lhs, Concrete_it const& rhs)
+    {
+        return lhs.m_array == rhs.m_array
+            && lhs.m_index == rhs.m_index;
+    }
+
+    friend bool operator!=(Concrete_it const& lhs, Concrete_it const& rhs)
+    {
+        return lhs.m_array != rhs.m_array
+            || lhs.m_index != rhs.m_index;
+    }
+
+    friend bool operator<(Concrete_it const& lhs, Concrete_it const& rhs)
+    {
+        return lhs.m_index < rhs.m_index;
+    }
+
+    friend bool operator>(Concrete_it const& lhs, Concrete_it const& rhs)
+    {
+        return lhs.m_index < rhs.m_index;
+    }
+
+    friend bool operator<=(Concrete_it const& lhs, Concrete_it const& rhs)
+    {
+        return lhs.m_index <= rhs.m_index;
+    }
+
+    friend bool operator>=(Concrete_it const& lhs, Concrete_it const& rhs)
+    {
+        return lhs.m_index >= rhs.m_index;
     }
 
 };
@@ -384,6 +407,27 @@ noexcept
     : m_array   {pointer}
     , m_index   {index}
 {
+}
+
+
+
+
+template <typename Concrete_it, bool B>
+auto VertexArray_iterator_interface<Concrete_it,B>::operator[](std::size_t idx) noexcept
+    -> typename VertexArray_iterator_interface<Concrete_it,B>::reference
+{
+    return *(Concrete_it{*m_array, idx});
+}
+
+
+
+
+template <typename Concrete_it, bool B>
+auto VertexArray_iterator_interface<Concrete_it,B>::operator[](std::size_t idx)
+const noexcept
+    -> typename VertexArray_iterator_interface<Concrete_it,B>::reference
+{
+    return *(Concrete_it{*m_array, idx});
 }
 
 

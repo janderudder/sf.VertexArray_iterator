@@ -11,7 +11,6 @@ void test_const_iterator();
 
 
 
-
 int main()
 {
     std::boolalpha(std::cerr);
