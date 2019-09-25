@@ -429,7 +429,7 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator++()
 noexcept
 {
     ++m_index;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -440,7 +440,7 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator++(int)
 noexcept
 {
     ++m_index;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -451,7 +451,7 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator--()
 noexcept
 {
     ++m_index;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -462,7 +462,7 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator--(int)
 noexcept
 {
     ++m_index;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -472,7 +472,7 @@ template <typename Concrete_it, bool B>
 Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator+=(int n) noexcept
 {
     m_index += n;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -482,7 +482,7 @@ template <typename Concrete_it, bool B>
 Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator-=(int n) noexcept
 {
     m_index -= n;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -492,7 +492,7 @@ template <typename Concrete_it, bool B>
 Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator+=(Concrete_it const& rhs) noexcept
 {
     m_index += rhs.m_index;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }
 
 
@@ -502,5 +502,5 @@ template <typename Concrete_it, bool B>
 Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator-=(Concrete_it const& rhs) noexcept
 {
     m_index -= rhs.m_index;
-    return (*static_cast<Concrete_it*>(this));
+    return (static_cast<Concrete_it&>(*this));
 }

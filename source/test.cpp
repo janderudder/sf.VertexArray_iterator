@@ -10,9 +10,23 @@ void test_iterator();
 void test_const_iterator();
 
 
+void current_test()
+{
+    sf::VertexArray va {sf::PrimitiveType::Points, 1};
+
+    auto it = sf::cbegin(va);
+
+    // (*it).color = sf::Color::Blue;
+}
+
+
+
 int main()
 {
     std::boolalpha(std::cerr);
+
+    // current_test();
+    // return 0;
 
     std::cerr << "test sf::VertexArray's iterator\n";
     test_iterator();
@@ -49,31 +63,39 @@ void test_iterator()
     ENSURE((sf::begin(va) + (std::size_t)(2)) == sf::begin(va)+2, "can add it and ULL");
     ENSURE((sf::begin(va) + (int)(3)) == sf::begin(va)+3, "can add it and int");
 
-    ENSURE((sf::begin(va) + va.getVertexCount()) == sf::end(va), "begin + (VA's size) should be equal to end");
-    ENSURE((sf::end(va) - va.getVertexCount()) == sf::begin(va), "end - (VA's size) should be equal to begin");
+    ENSURE((sf::begin(va) + va.getVertexCount()) == sf::end(va), "begin + [VA's size] should be equal to end");
+    ENSURE((sf::end(va) - va.getVertexCount()) == sf::begin(va), "end - [VA's size] should be equal to begin");
 
     ENSURE(std::distance(beg_it1, end_it2) == 0, "empty VA begin and end: no distance");
     ENSURE(std::distance(sf::begin(va), sf::end(va)) == 0, "empty VA sf::begin() and sf::end(): no distance");
     ENSURE(std::distance(++beg_it1, end_it2) == -1, "++begin and end: distance == -1");
     ENSURE(std::distance(sf::begin(va), sf::end(va)+1) == 1, "empty VA sf::begin() and sf::end()+1: distance 1");
 
-    va.append({}); va[0].position.x++;
-    va.append({}); va[1].position.x++;
-    va.append({}); va[2].position.x++;
+    ENSURE(([&va]{
+        auto it = sf::begin(va);
+        std::advance(it, 0);
+        return it == sf::begin(va);
+    })(), "begin advanced of 0 == begin");
+    ENSURE(([&va]{
+        auto it = sf::begin(va);
+        std::advance(it, 1);
+        return it == sf::begin(va) + 1;
+    })(), "begin advanced of 1 == begin + 1");
+
+    va.append({}); va[0].position.x = 0;
+    va.append({}); va[1].position.x = 0;
+    va.append({}); va[2].position.x = 0;
     std::cerr << "\n--- Array has 3 elements now\n";
 
-    for (auto const& vertex : std::as_const(va))
-        ENSURE(vertex.position.x == 1, "const iteration: position.x should be 1");
-
     for (auto& vertex : va)
-        ENSURE(++vertex.position.x == 2, "mut iteration: position.x should increment to 2");
+        ENSURE(++vertex.position.x == 1, "mut iteration: position.x should increment to 1");
 
     ENSURE((sf::end(va) - sf::end(va)) == 0, "subtract it to itself should still be 0");
     ENSURE((sf::begin(va) - sf::begin(va)) == 0, "subtract it to itself should still be 0");
     ENSURE((++sf::begin(va) - ++sf::begin(va)) == 0, "subtract it to itself should still be 0");
 
-    ENSURE((sf::begin(va) + va.getVertexCount()) == sf::end(va), "begin + (VA's size) should still be equal to end");
-    ENSURE((sf::end(va) - va.getVertexCount()) == sf::begin(va), "end - (VA's size) should still be equal to begin");
+    ENSURE((sf::begin(va) + va.getVertexCount()) == sf::end(va), "begin + [VA's size] should still be equal to end");
+    ENSURE((sf::end(va) - va.getVertexCount()) == sf::begin(va), "end - [VA's size] should still be equal to begin");
     ENSURE(sf::end(va) - sf::begin(va) == (std::ptrdiff_t)va.getVertexCount(), "end - begin should be VA's size when array empty");
     ENSURE((unsigned)std::distance(sf::begin(va), sf::end(va)) == va.getVertexCount(), "distance should be == VA's size");
 
@@ -84,7 +106,7 @@ void test_iterator()
             ++count;
         }
         return count == va.getVertexCount();
-    })(), "range-for loop iterates (VA's size) times");
+    })(), "range-for loop iterates [VA's size] times");
 }
 
 
@@ -115,31 +137,39 @@ void test_const_iterator()
     ENSURE((sf::cbegin(va) + (std::size_t)(2)) == sf::cbegin(va)+2, "can add it and ULL");
     ENSURE((sf::cbegin(va) + (int)(3)) == sf::cbegin(va)+3, "can add it and int");
 
-    ENSURE((sf::cbegin(va) + va.getVertexCount()) == sf::cend(va), "begin + (VA's size) should be equal to end");
-    ENSURE((sf::cend(va) - va.getVertexCount()) == sf::cbegin(va), "end - (VA's size) should be equal to begin");
+    ENSURE((sf::cbegin(va) + va.getVertexCount()) == sf::cend(va), "begin + [VA's size] should be equal to end");
+    ENSURE((sf::cend(va) - va.getVertexCount()) == sf::cbegin(va), "end - [VA's size] should be equal to begin");
 
     ENSURE(std::distance(beg_cit1, end_cit2) == 0, "empty VA begin and end: no distance");
     ENSURE(std::distance(sf::cbegin(va), sf::cend(va)) == 0, "empty VA sf::begin() and sf::end(): no distance");
     ENSURE(std::distance(++beg_cit1, end_cit2) == -1, "++begin and end: distance == -1");
     ENSURE(std::distance(sf::cbegin(va), sf::cend(va)+1) == 1, "empty VA sf::begin() and sf::end()+1: distance 1");
 
-    va.append({}); va[0].position.x++;
-    va.append({}); va[1].position.x++;
-    va.append({}); va[2].position.x++;
+    ENSURE(([&va]{
+        auto it = sf::cbegin(va);
+        std::advance(it, 0);
+        return it == sf::cbegin(va);
+    })(), "cbegin advanced of 0 == cbegin");
+    ENSURE(([&va]{
+        auto it = sf::cbegin(va);
+        std::advance(it, 1);
+        return it == sf::cbegin(va) + 1;
+    })(), "cbegin advanced of 1 == cbegin + 1");
+
+    va.append({}); va[0].position.x = 1;
+    va.append({}); va[1].position.x = 1;
+    va.append({}); va[2].position.x = 1;
     std::cerr << "\n--- Array has 3 elements now\n";
 
     for (auto const& vertex : std::as_const(va))
         ENSURE(vertex.position.x == 1, "const iteration: position.x should be 1");
 
-    for (auto& vertex : va)
-        ENSURE(++vertex.position.x == 2, "mut iteration: position.x should increment to 2");
-
     ENSURE((sf::cend(va) - sf::cend(va)) == 0, "subtract it to itself should still be 0");
     ENSURE((sf::cbegin(va) - sf::cbegin(va)) == 0, "subtract it to itself should still be 0");
     ENSURE((++sf::cbegin(va) - ++sf::cbegin(va)) == 0, "subtract it to itself should still be 0");
 
-    ENSURE((sf::cbegin(va) + va.getVertexCount()) == sf::cend(va), "begin + (VA's size) should still be equal to end");
-    ENSURE((sf::cend(va) - va.getVertexCount()) == sf::cbegin(va), "end - (VA's size) should still be equal to begin");
+    ENSURE((sf::cbegin(va) + va.getVertexCount()) == sf::cend(va), "begin + [VA's size] should still be equal to end");
+    ENSURE((sf::cend(va) - va.getVertexCount()) == sf::cbegin(va), "end - [VA's size] should still be equal to begin");
     ENSURE(sf::cend(va) - sf::cbegin(va) == (std::ptrdiff_t)va.getVertexCount(), "end - begin should be VA's size when array empty");
     ENSURE((unsigned)std::distance(sf::cbegin(va), sf::cend(va)) == va.getVertexCount(), "distance should be == VA's size");
 
@@ -150,5 +180,5 @@ void test_const_iterator()
             ++count;
         }
         return count == va.getVertexCount();
-    })(), "range-for loop iterates (VA's size) times");
+    })(), "range-for loop iterates [VA's size] times");
 }
