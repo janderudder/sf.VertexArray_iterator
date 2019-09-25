@@ -10,23 +10,11 @@ void test_iterator();
 void test_const_iterator();
 
 
-void current_test()
-{
-    sf::VertexArray va {sf::PrimitiveType::Points, 1};
-
-    auto it = sf::cbegin(va);
-
-    // (*it).color = sf::Color::Blue;
-}
-
 
 
 int main()
 {
     std::boolalpha(std::cerr);
-
-    // current_test();
-    // return 0;
 
     std::cerr << "test sf::VertexArray's iterator\n";
     test_iterator();
