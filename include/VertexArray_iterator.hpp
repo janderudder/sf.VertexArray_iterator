@@ -58,13 +58,9 @@ public:
     pointer                 operator->() const noexcept;
 
     Concrete_it&            operator++() noexcept;
-    // Concrete_it const&      operator++() const noexcept;
     Concrete_it&            operator++(int) noexcept;
-    // Concrete_it const&      operator++(int) const noexcept;
     Concrete_it&            operator--() noexcept;
-    // Concrete_it const&      operator--() const noexcept;
     Concrete_it&            operator--(int) noexcept;
-    // Concrete_it const&      operator--(int) const noexcept;
     Concrete_it&            operator+=(int) noexcept;
     Concrete_it&            operator-=(int) noexcept;
     Concrete_it&            operator+=(Concrete_it const&) noexcept;
