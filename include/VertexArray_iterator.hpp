@@ -297,7 +297,7 @@ VertexArray_const_reverse_iterator  crend(sf::VertexArray const&) noexcept;
 
 
 
-VertexArray_iterator begin(sf::VertexArray& va) noexcept
+inline VertexArray_iterator begin(sf::VertexArray& va) noexcept
 {
     return {va, 0};
 }
@@ -305,7 +305,7 @@ VertexArray_iterator begin(sf::VertexArray& va) noexcept
 
 
 
-VertexArray_iterator end(sf::VertexArray& va) noexcept
+inline VertexArray_iterator end(sf::VertexArray& va) noexcept
 {
     return {va, va.getVertexCount()};
 }
@@ -313,7 +313,7 @@ VertexArray_iterator end(sf::VertexArray& va) noexcept
 
 
 
-VertexArray_const_iterator begin(sf::VertexArray const& va) noexcept
+inline VertexArray_const_iterator begin(sf::VertexArray const& va) noexcept
 {
     return {va, 0};
 }
@@ -321,7 +321,7 @@ VertexArray_const_iterator begin(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_const_iterator end(sf::VertexArray const& va) noexcept
+inline VertexArray_const_iterator end(sf::VertexArray const& va) noexcept
 {
     return {va, va.getVertexCount()};
 }
@@ -329,7 +329,7 @@ VertexArray_const_iterator end(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_const_iterator cbegin(sf::VertexArray const& va) noexcept
+inline VertexArray_const_iterator cbegin(sf::VertexArray const& va) noexcept
 {
     return {va, 0};
 }
@@ -337,7 +337,7 @@ VertexArray_const_iterator cbegin(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_const_iterator cend(sf::VertexArray const& va) noexcept
+inline VertexArray_const_iterator cend(sf::VertexArray const& va) noexcept
 {
     return {va, va.getVertexCount()};
 }
@@ -345,7 +345,7 @@ VertexArray_const_iterator cend(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_reverse_iterator rbegin(sf::VertexArray& va) noexcept
+inline VertexArray_reverse_iterator rbegin(sf::VertexArray& va) noexcept
 {
     return {va, 0};
 }
@@ -353,7 +353,7 @@ VertexArray_reverse_iterator rbegin(sf::VertexArray& va) noexcept
 
 
 
-VertexArray_reverse_iterator rend(sf::VertexArray& va) noexcept
+inline VertexArray_reverse_iterator rend(sf::VertexArray& va) noexcept
 {
     return {va, va.getVertexCount()};
 }
@@ -361,7 +361,7 @@ VertexArray_reverse_iterator rend(sf::VertexArray& va) noexcept
 
 
 
-VertexArray_const_reverse_iterator rbegin(sf::VertexArray const& va) noexcept
+inline VertexArray_const_reverse_iterator rbegin(sf::VertexArray const& va) noexcept
 {
     return {va, 0};
 }
@@ -369,7 +369,7 @@ VertexArray_const_reverse_iterator rbegin(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_const_reverse_iterator rend(sf::VertexArray const& va) noexcept
+inline VertexArray_const_reverse_iterator rend(sf::VertexArray const& va) noexcept
 {
     return {va, va.getVertexCount()};
 }
@@ -377,7 +377,7 @@ VertexArray_const_reverse_iterator rend(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_const_reverse_iterator crbegin(sf::VertexArray const& va) noexcept
+inline VertexArray_const_reverse_iterator crbegin(sf::VertexArray const& va) noexcept
 {
     return {va, 0};
 }
@@ -385,7 +385,7 @@ VertexArray_const_reverse_iterator crbegin(sf::VertexArray const& va) noexcept
 
 
 
-VertexArray_const_reverse_iterator crend(sf::VertexArray const& va) noexcept
+inline VertexArray_const_reverse_iterator crend(sf::VertexArray const& va) noexcept
 {
     return {va, va.getVertexCount()};
 }
