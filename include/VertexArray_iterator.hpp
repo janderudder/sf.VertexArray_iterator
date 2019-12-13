@@ -30,8 +30,6 @@ struct VertexArray_reverse_iterator;
     exposes the (mostly) common API for the various iterator types.
 
     @param  Concrete_it the concrete iterator child type
-    @param  is_const_iterator a boolean specifying the constness of the concrete
-            iterator
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 template <typename Concrete_it>
 class VertexArray_iterator_interface
