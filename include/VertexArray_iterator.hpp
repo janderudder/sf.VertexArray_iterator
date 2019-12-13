@@ -1,9 +1,9 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    VertexArray_iterator
-    VertexArray_const_iterator
-    VertexArray_reverse_iterator
-    VertexArray_const_reverse_iterator
+    class VertexArray_iterator
+    class VertexArray_const_iterator
+    class VertexArray_reverse_iterator
+    class VertexArray_const_reverse_iterator
 
     This file defines the above iterator types,
     specializes `std::iterator_traits` for those types,
@@ -18,6 +18,13 @@
 #include <type_traits>
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
+
+// Forward declarations
+struct VertexArray_iterator;
+struct VertexArray_const_iterator;
+struct VertexArray_const_reverse_iterator;
+struct VertexArray_reverse_iterator;
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     class VertexArray_iterator_interface
     exposes the (mostly) common API for the various iterator types.
@@ -26,11 +33,21 @@
     @param  is_const_iterator a boolean specifying the constness of the concrete
             iterator
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-template <typename Concrete_it, bool is_const_iterator>
+template <typename Concrete_it>
 class VertexArray_iterator_interface
 {
+    // Explicitly specify constness property of the concrete iterator type
+    constexpr static bool is_const_iterator
+    = std::conditional_t<
+        std::is_same_v<Concrete_it, VertexArray_const_iterator>
+        || std::is_same_v<Concrete_it, VertexArray_const_reverse_iterator>
+        , std::true_type
+        , std::false_type
+    >::value;
+
 public:
-    using value_type = std::conditional_t<is_const_iterator,
+    using value_type
+    = std::conditional_t<is_const_iterator,
         sf::Vertex const,
         sf::Vertex
     >;
@@ -40,7 +57,8 @@ public:
     using iterator_category = std::bidirectional_iterator_tag;
 
 protected:
-    using array_pointer_t = std::conditional_t<is_const_iterator,
+    using array_pointer_t
+    = std::conditional_t<is_const_iterator,
         sf::VertexArray const*,
         sf::VertexArray*
     >;
@@ -130,7 +148,7 @@ public:
     Concrete iterator classes inheriting above interface
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 struct VertexArray_const_iterator
-    : public VertexArray_iterator_interface<VertexArray_const_iterator, true>
+    : public VertexArray_iterator_interface<VertexArray_const_iterator>
 {
     VertexArray_const_iterator(sf::VertexArray const& array, std::size_t idx)
     noexcept
@@ -142,7 +160,7 @@ struct VertexArray_const_iterator
 
 
 struct VertexArray_iterator
-    : public VertexArray_iterator_interface<VertexArray_iterator, false>
+    : public VertexArray_iterator_interface<VertexArray_iterator>
 {
     VertexArray_iterator(sf::VertexArray& array, std::size_t idx) noexcept
         : VertexArray_iterator_interface{&array, idx}
@@ -158,9 +176,7 @@ struct VertexArray_iterator
 
 
 struct VertexArray_const_reverse_iterator
-    : public VertexArray_iterator_interface<
-        VertexArray_const_reverse_iterator,
-        true>
+    : public VertexArray_iterator_interface<VertexArray_const_reverse_iterator>
 {
     VertexArray_const_reverse_iterator(sf::VertexArray const& array, std::size_t idx)
     noexcept
@@ -186,7 +202,7 @@ struct VertexArray_const_reverse_iterator
 
 
 struct VertexArray_reverse_iterator
-    : public VertexArray_iterator_interface<VertexArray_reverse_iterator, false>
+    : public VertexArray_iterator_interface<VertexArray_reverse_iterator>
 {
     VertexArray_reverse_iterator(sf::VertexArray& array, std::size_t idx)
     noexcept
@@ -400,8 +416,8 @@ inline VertexArray_const_reverse_iterator crend(sf::VertexArray const& va) noexc
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     iterator interface implementation
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-template <typename C, bool B>
-VertexArray_iterator_interface<C,B>::
+template <typename C>
+VertexArray_iterator_interface<C>::
 VertexArray_iterator_interface(array_pointer_t pointer, std::size_t index)
 noexcept
     : m_array   {pointer}
@@ -412,9 +428,9 @@ noexcept
 
 
 
-template <typename Concrete_it, bool B>
-auto VertexArray_iterator_interface<Concrete_it,B>::operator[](std::size_t idx) noexcept
-    -> typename VertexArray_iterator_interface<Concrete_it,B>::reference
+template <typename Concrete_it>
+auto VertexArray_iterator_interface<Concrete_it>::operator[](std::size_t idx) noexcept
+    -> typename VertexArray_iterator_interface<Concrete_it>::reference
 {
     return *(Concrete_it{*m_array, idx});
 }
@@ -422,10 +438,10 @@ auto VertexArray_iterator_interface<Concrete_it,B>::operator[](std::size_t idx) 
 
 
 
-template <typename Concrete_it, bool B>
-auto VertexArray_iterator_interface<Concrete_it,B>::operator[](std::size_t idx)
+template <typename Concrete_it>
+auto VertexArray_iterator_interface<Concrete_it>::operator[](std::size_t idx)
 const noexcept
-    -> typename VertexArray_iterator_interface<Concrete_it,B>::reference
+    -> typename VertexArray_iterator_interface<Concrete_it>::reference
 {
     return *(Concrete_it{*m_array, idx});
 }
@@ -433,9 +449,9 @@ const noexcept
 
 
 
-template <typename Concrete_it, bool B>
-auto VertexArray_iterator_interface<Concrete_it,B>::operator*() noexcept
-    -> typename VertexArray_iterator_interface<Concrete_it,B>::reference
+template <typename Concrete_it>
+auto VertexArray_iterator_interface<Concrete_it>::operator*() noexcept
+    -> typename VertexArray_iterator_interface<Concrete_it>::reference
 {
     return (*m_array)[m_index];
 }
@@ -443,10 +459,10 @@ auto VertexArray_iterator_interface<Concrete_it,B>::operator*() noexcept
 
 
 
-template <typename Concrete_it, bool B>
-auto VertexArray_iterator_interface<Concrete_it,B>::operator*()
+template <typename Concrete_it>
+auto VertexArray_iterator_interface<Concrete_it>::operator*()
 const noexcept
-    -> typename VertexArray_iterator_interface<Concrete_it,B>::reference
+    -> typename VertexArray_iterator_interface<Concrete_it>::reference
 {
     return (*m_array)[m_index];
 }
@@ -454,9 +470,9 @@ const noexcept
 
 
 
-template <typename Concrete_it, bool B>
-auto VertexArray_iterator_interface<Concrete_it,B>::operator->() noexcept
-    -> typename VertexArray_iterator_interface<Concrete_it,B>::pointer
+template <typename Concrete_it>
+auto VertexArray_iterator_interface<Concrete_it>::operator->() noexcept
+    -> typename VertexArray_iterator_interface<Concrete_it>::pointer
 {
     return &(*m_array)[m_index];
 }
@@ -464,8 +480,8 @@ auto VertexArray_iterator_interface<Concrete_it,B>::operator->() noexcept
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator++()
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator++()
 noexcept
 {
     ++m_index;
@@ -475,8 +491,8 @@ noexcept
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator++(int)
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator++(int)
 noexcept
 {
     ++m_index;
@@ -486,8 +502,8 @@ noexcept
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator--()
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator--()
 noexcept
 {
     ++m_index;
@@ -497,8 +513,8 @@ noexcept
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator--(int)
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator--(int)
 noexcept
 {
     ++m_index;
@@ -508,8 +524,8 @@ noexcept
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator+=(int n) noexcept
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator+=(int n) noexcept
 {
     m_index += n;
     return (static_cast<Concrete_it&>(*this));
@@ -518,8 +534,8 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator+=(int n) no
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator-=(int n) noexcept
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator-=(int n) noexcept
 {
     m_index -= n;
     return (static_cast<Concrete_it&>(*this));
@@ -528,8 +544,8 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator-=(int n) no
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator+=(Concrete_it const& rhs) noexcept
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator+=(Concrete_it const& rhs) noexcept
 {
     m_index += rhs.m_index;
     return (static_cast<Concrete_it&>(*this));
@@ -538,8 +554,8 @@ Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator+=(Concrete_
 
 
 
-template <typename Concrete_it, bool B>
-Concrete_it& VertexArray_iterator_interface<Concrete_it,B>::operator-=(Concrete_it const& rhs) noexcept
+template <typename Concrete_it>
+Concrete_it& VertexArray_iterator_interface<Concrete_it>::operator-=(Concrete_it const& rhs) noexcept
 {
     m_index -= rhs.m_index;
     return (static_cast<Concrete_it&>(*this));
